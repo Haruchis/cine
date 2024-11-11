@@ -6,9 +6,9 @@
 
 {% block content %}
     <div class="container">
+        <!-- Botón de "Agregar Película" y encabezado -->
         <div class="d-flex justify-content-between align-items-center my-4">
             <h2 class="text-primary">Películas en Cartelera</h2>
-            <!-- Botón para abrir el modal -->
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#agregarPeliculaModal">
                 Agregar Película
             </button>
@@ -17,13 +17,32 @@
         <!-- Lista de películas -->
         <div class="list-group">
             {% for pelicula in peliculas %}
-                <a href="{% url 'cartelera:ver_proyecciones' pelicula.id_pelicula %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5 class="mb-1">{{ pelicula.titulo }}</h5>
-                        <small class="text-muted">{{ pelicula.genero }} - Clasificación: {{ pelicula.clasificacion }}</small>
+                <div class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-1">{{ pelicula.titulo }}</h5>
+                            <small class="text-muted">{{ pelicula.genero }} - Clasificación: {{ pelicula.clasificacion }}</small>
+                        </div>
+                        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#proyecciones-{{ pelicula.id_pelicula }}" aria-expanded="false" aria-controls="proyecciones-{{ pelicula.id_pelicula }}">
+                            Ver Proyecciones
+                        </button>
                     </div>
-                    <span class="badge bg-primary rounded-pill">Ver Proyecciones</span>
-                </a>
+                    
+                    <!-- Proyecciones de la película (ocultas por defecto) -->
+                    <div class="collapse mt-3" id="proyecciones-{{ pelicula.id_pelicula }}">
+                        <h6 class="text-secondary">Proyecciones Disponibles</h6>
+                        <ul class="list-group list-group-flush">
+                            {% for proyeccion in pelicula.proyeccion_set.all %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span><strong>Fecha:</strong> {{ proyeccion.fecha }} - <strong>Hora:</strong> {{ proyeccion.hora }}</span>
+                                    <a href="{% url 'cartelera:reservar_boleto' proyeccion.id_proyeccion %}" class="btn btn-outline-success btn-sm">Reservar Boleto</a>
+                                </li>
+                            {% empty %}
+                                <li class="list-group-item text-muted">No hay proyecciones disponibles para esta película.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
             {% endfor %}
         </div>
     </div>
@@ -37,7 +56,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{% url 'cartelera:agregar_pelicula' %}">
+                    <form method="post" action="{% url 'cartelera:listar_peliculas' %}">
                         {% csrf_token %}
                         {{ form.as_p }}
                         <button type="submit" class="btn btn-primary mt-3">Guardar Película</button>

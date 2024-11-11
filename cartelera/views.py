@@ -20,6 +20,7 @@ def listar_peliculas(request):
             form.save()
             return redirect('cartelera:listar_peliculas')
     
+    # Pasamos tanto las películas como el formulario
     return render(request, 'cartelera/listar_peliculas.html', {
         'peliculas': peliculas,
         'form': form
