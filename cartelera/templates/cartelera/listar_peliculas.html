@@ -1,19 +1,49 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Cartelera de Películas</title>
-</head>
-<body>
-    <h1>Cartelera de Películas</h1>
-    <ul>
-        {% for pelicula in peliculas %}
-            <li>
-                <a href="{% url 'cartelera:ver_proyecciones' pelicula.id_pelicula %}">
-                    {{ pelicula.titulo }}
-                </a> - {{ pelicula.genero }} ({{ pelicula.clasificacion }})
-            </li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'cartelera/base.html' %}
+
+{% block title %}Cartelera de Películas{% endblock %}
+
+{% block header %}Cartelera de Películas{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center my-4">
+            <h2 class="text-primary">Películas en Cartelera</h2>
+            <!-- Botón para abrir el modal -->
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#agregarPeliculaModal">
+                Agregar Película
+            </button>
+        </div>
+
+        <!-- Lista de películas -->
+        <div class="list-group">
+            {% for pelicula in peliculas %}
+                <a href="{% url 'cartelera:ver_proyecciones' pelicula.id_pelicula %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-1">{{ pelicula.titulo }}</h5>
+                        <small class="text-muted">{{ pelicula.genero }} - Clasificación: {{ pelicula.clasificacion }}</small>
+                    </div>
+                    <span class="badge bg-primary rounded-pill">Ver Proyecciones</span>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Modal de Bootstrap para agregar una película -->
+    <div class="modal fade" id="agregarPeliculaModal" tabindex="-1" aria-labelledby="agregarPeliculaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="agregarPeliculaModalLabel">Agregar Nueva Película</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{% url 'cartelera:agregar_pelicula' %}">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary mt-3">Guardar Película</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
