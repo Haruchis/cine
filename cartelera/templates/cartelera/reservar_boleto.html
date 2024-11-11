@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservar Boleto</title>
+</head>
+<body>
+    <h1>Reservar Boleto</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="asiento">Número de Asiento:</label>
+        <input type="text" id="asiento" name="asiento" required>
+        <label for="cliente_id">ID del Cliente:</label>
+        <input type="text" id="cliente_id" name="cliente_id" required>
+        <button type="submit">Reservar</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cartelera de Películas</title>
+</head>
+<body>
+    <h1>Cartelera de Películas</h1>
+    <ul>
+        {% for pelicula in peliculas %}
+            <li>
+                <a href="{% url 'cartelera:ver_proyecciones' pelicula.id_pelicula %}">
+                    {{ pelicula.titulo }}
+                </a> - {{ pelicula.genero }} ({{ pelicula.clasificacion }})
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
