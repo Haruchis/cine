@@ -45,8 +45,8 @@ ROOT_URLCONF = 'cine.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'DIRS': [BASE_DIR / 'cartelera' / 'templates'],  # Aquí especifica la ruta
+        'APP_DIRS': True,  # Esto permite que Django busque en los directorios de las apps
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -114,3 +114,6 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+LOGIN_REDIRECT_URL = '/cartelera/peliculas/'  # Redirige aquí después de iniciar sesión
+LOGOUT_REDIRECT_URL = '/login/'  # Redirige aquí después de cerrar sesión
+

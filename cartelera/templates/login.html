@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}Iniciar Sesión - Cine Harunchis{% endblock %}
+
+{% block content %}
+<div class="min-vh-100 d-flex align-items-center" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card bg-white shadow-lg border-0 rounded-4">
+                    <div class="card-body p-5">
+                        <!-- Logo y Título -->
+                        <div class="text-center mb-4">
+                            <i class="fas fa-film fa-3x mb-3" style="color: #1e3c72;"></i>
+                            <h2 class="fw-bold mb-2">Cine Harunchis</h2>
+                            <p class="text-muted">Bienvenido de nuevo</p>
+                        </div>
+
+                        <!-- Formulario -->
+                        <form method="post" action="{% url 'login' %}">
+                            {% csrf_token %}
+                            
+                            <!-- Campo Usuario -->
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Usuario" required>
+                                <label for="username">
+                                    <i class="fas fa-user me-2"></i>Usuario
+                                </label>
+                            </div>
+
+                            <!-- Campo Contraseña -->
+                            <div class="form-floating mb-4">
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" required>
+                                <label for="password">
+                                    <i class="fas fa-lock me-2"></i>Contraseña
+                                </label>
+                            </div>
+
+                            <!-- Recordarme -->
+                            <div class="form-check mb-4">
+                                <input class="form-check-input" type="checkbox" id="remember">
+                                <label class="form-check-label" for="remember">
+                                    Recordar mi sesión
+                                </label>
+                            </div>
+
+                            <!-- Botón de Ingreso -->
+                            <button type="submit" class="btn btn-primary w-100 py-3 mb-3 rounded-3">
+                                <i class="fas fa-sign-in-alt me-2"></i>Ingresar
+                            </button>
+
+                            <!-- Enlaces adicionales -->
+                            <div class="text-center">
+                                <a href="#" class="text-decoration-none">¿Olvidaste tu contraseña?</a>
+                                <hr class="my-4">
+                                <p class="mb-0">¿No tienes una cuenta? 
+                                    <a href="#" class="text-decoration-none">Regístrate</a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="text-center text-white mt-4">
+                    <small>&copy; 2024 Cine Harunchis. Todos los derechos reservados.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-floating>label {
+        color: #6c757d;
+    }
+    .form-control:focus {
+        border-color: #1e3c72;
+        box-shadow: 0 0 0 0.25rem rgba(30, 60, 114, 0.25);
+    }
+    .btn-primary {
+        background-color: #1e3c72;
+        border-color: #1e3c72;
+        transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+        background-color: #2a5298;
+        border-color: #2a5298;
+        transform: translateY(-2px);
+    }
+    .card {
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+    }
+</style>
+{% endblock %}

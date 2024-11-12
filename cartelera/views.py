@@ -4,27 +4,30 @@ from django.urls import reverse
 from .models import Pelicula, Proyeccion, Boleto, Cliente
 from .forms import PeliculaForm
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+
+@login_required
 def listar_peliculas(request):
     """
-    Vista para listar todas las películas disponibles y manejar la creación de nuevas películas.
+    Vista para listar todas las películas disponibles.
+    Solo los administradores pueden agregar y eliminar películas.
     """
     peliculas = Pelicula.objects.all()
-    
-    # Crear un formulario vacío en caso de que se necesite en el modal
-    form = PeliculaForm()
-    
-    # Si se envía el formulario para agregar una película (método POST)
-    if request.method == 'POST':
+    form = PeliculaForm() if request.user.is_staff else None  # Solo carga el formulario para el admin
+
+    if request.method == 'POST' and request.user.is_staff:
         form = PeliculaForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('cartelera:listar_peliculas')
-    
-    # Pasamos tanto las películas como el formulario
-    return render(request, 'cartelera/listar_peliculas.html', {
+
+    return render(request, 'listar_peliculas.html', {
         'peliculas': peliculas,
-        'form': form
+        'form': form,
+        'es_admin': request.user.is_staff,  # Pasar si es admin
     })
+
 
 def agregar_pelicula(request):
     """
@@ -76,9 +79,12 @@ def reservar_boleto(request, proyeccion_id):
     return render(request, 'cartelera/reservar_boleto.html', {
         'proyeccion': proyeccion
     })
-def eliminar_pelicula(request, id_pelicula):
-    pelicula = get_object_or_404(Pelicula, id=id_pelicula)
-    pelicula.delete()
-    return redirect(reverse('cartelera:listar_peliculas'))
+# views.py
+from django.contrib.admin.views.decorators import staff_member_required
 
+@staff_member_required
+def eliminar_pelicula(request, id_pelicula):
+    pelicula = get_object_or_404(Pelicula, id_pelicula=id_pelicula)
+    pelicula.delete()
+    return redirect('cartelera:listar_peliculas')
 

@@ -28,25 +28,22 @@ class Sala(models.Model):
     def _str_(self):
         return f"Sala {self.numero_sala}"
 
-class Pelicula(models.Model):
-    id_pelicula = models.CharField(primary_key=True, max_length=50)
-    titulo = models.CharField(max_length=200)
-    duracion = models.CharField(max_length=10)
-    genero = models.CharField(max_length=50)
-    clasificacion = models.CharField(max_length=10)
-
-    def _str_(self):
-        return self.titulo
 
 class Proyeccion(models.Model):
-    id_proyeccion = models.CharField(primary_key=True, max_length=50)
-    fecha = models.DateField()
-    hora = models.TimeField()
-    id_pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE)
-    id_sala = models.ForeignKey(Sala, on_delete=models.CASCADE)
+    id_pelicula = models.ForeignKey(
+        'Pelicula',  # Referencia entre comillas
+        on_delete=models.CASCADE,
+        related_name='proyecciones'
+    )
+    fecha = models.DateField(verbose_name="Fecha")
+    hora = models.TimeField(verbose_name="Hora")
+    sala = models.CharField(max_length=10, verbose_name="Sala")
 
-    def _str_(self):
-        return f"{self.id_pelicula} en Sala {self.id_sala} a las {self.hora}"
+    def __str__(self):
+        return f"{self.id_pelicula.titulo} - {self.fecha} {self.hora}"
+
+
+
 
 class Venta(models.Model):
     id_venta = models.CharField(primary_key=True, max_length=50)
@@ -67,3 +64,21 @@ class Boleto(models.Model):
 
     def _str_(self):
         return f"Boleto {self.id_boleto} - Asiento {self.asiento}"
+    
+class Pelicula(models.Model):
+    id_pelicula = models.AutoField(primary_key=True) 
+    titulo = models.CharField(max_length=100, unique=True, verbose_name="Título")
+    genero = models.CharField(max_length=50, verbose_name="Género")
+    clasificacion = models.CharField(max_length=10, verbose_name="Clasificación")
+    duracion = models.PositiveIntegerField(verbose_name="Duración (min)")
+    sinopsis = models.TextField(verbose_name="Sinopsis", blank=True, null=True)
+    fecha_estreno = models.DateField(verbose_name="Fecha de Estreno", blank=True, null=True)
+    imagen = models.ImageField(upload_to='imagenes_peliculas/', blank=True, null=True, verbose_name="Imagen de la Película")
+
+    class Meta:
+        ordering = ['titulo']
+        verbose_name = "Película"
+        verbose_name_plural = "Películas"
+
+    def __str__(self):
+        return self.titulo
