@@ -76,3 +76,9 @@ def reservar_boleto(request, proyeccion_id):
     return render(request, 'cartelera/reservar_boleto.html', {
         'proyeccion': proyeccion
     })
+def eliminar_pelicula(request, id_pelicula):
+    pelicula = get_object_or_404(Pelicula, id=id_pelicula)
+    pelicula.delete()
+    return redirect(reverse('cartelera:listar_peliculas'))
+
+

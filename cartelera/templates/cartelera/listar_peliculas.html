@@ -23,9 +23,18 @@
                             <h5 class="mb-1">{{ pelicula.titulo }}</h5>
                             <small class="text-muted">{{ pelicula.genero }} - Clasificación: {{ pelicula.clasificacion }}</small>
                         </div>
-                        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#proyecciones-{{ pelicula.id_pelicula }}" aria-expanded="false" aria-controls="proyecciones-{{ pelicula.id_pelicula }}">
-                            Ver Proyecciones
-                        </button>
+                        <div class="btn-group">
+                            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#proyecciones-{{ pelicula.id_pelicula }}" aria-expanded="false" aria-controls="proyecciones-{{ pelicula.id_pelicula }}">
+                                Ver Proyecciones
+                            </button>
+                            <!-- Botón para eliminar la película -->
+                            <form method="post" action="{% url 'cartelera:eliminar_pelicula' pelicula.id_pelicula %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar esta película?')">
+                                    Eliminar
+                                </button>
+                            </form>
+                        </div>
                     </div>
                     
                     <!-- Proyecciones de la película (ocultas por defecto) -->
